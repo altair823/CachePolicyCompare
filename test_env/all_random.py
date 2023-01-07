@@ -22,6 +22,9 @@ if __name__ == '__main__':
 
     test_cases = np.random.randint(0, 100, iterations)
 
+    # Print progress bar in terminal
+    print("Progress: [", end="")
+
     for cache_size in range(cache_min_value, cache_max_value):
         optimal_cache = OptimalCache(cache_size, SwapMemory(100), test_cases)
         random_cache = RandomCache(cache_size, SwapMemory(100))
@@ -42,6 +45,9 @@ if __name__ == '__main__':
         lfu_cache_hit_count.append(lfu_cache.hit_count)
         lru_cache_hit_count.append(lru_cache.hit_count)
 
+        print("#", end="")
+
+    print("]")
     # Comparing the relationship between cache size and cache hits by cache type
     plt.title("Random 10000 page requests with cache size 1-100")
     plt.plot(optimal_cache_hit_count, label="Optimal Cache")
