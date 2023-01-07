@@ -2,7 +2,7 @@ import random
 
 import numpy as np
 
-from cache_type import Cache
+from cache.cache_type import Cache
 from page.page import Page
 from swap_mem import SwapMemory
 

@@ -1,6 +1,6 @@
 import numpy as np
 
-from cache_type import Cache
+from cache.cache_type import Cache
 from page.page import Page
 from swap_mem import SwapMemory
 
@@ -46,17 +46,18 @@ class OptimalCache(Cache):
         :param page_num: Page number to find distance for
         :return: Distance between the given page and the next time it will be used
         """
-        for i in range(len(self.future_page_nums)):
-            if self.future_page_nums[i] == page_num:
-                return i
-        return len(self.future_page_nums) + 1
+        return np.where(self.future_page_nums == page_num)[0][0]
+        # for i in range(len(self.future_page_nums)):
+        #     if self.future_page_nums[i] == page_num:
+        #         return i
+        # return len(self.future_page_nums) + 1
 
 
 if __name__ == '__main__':
     # Get the future page numbers
     future_pages = np.random.randint(0, 99, 10000)
     # Create the cache
-    optimal_cache = OptimalCache(100, SwapMemory(100), future_pages)
+    optimal_cache = OptimalCache(10, SwapMemory(100), future_pages)
     # Get the page data
     for i in range(0, 10000):
         optimal_cache.get_page_data(future_pages[i])
