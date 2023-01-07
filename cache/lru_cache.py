@@ -8,14 +8,14 @@ from page.page import Page
 from swap_mem import SwapMemory
 
 
-"""
-LRU Cache
-
-This cache uses a Least Recently Used (LRU) replacement policy. 
-This means that when a page is requested, if it is not in the cache, 
-the page that was least recently used is replaced.
-"""
 class LRUCache(Cache):
+    """
+    LRU Cache
+
+    This cache uses a Least Recently Used (LRU) replacement policy.
+    This means that when a page is requested, if it is not in the cache,
+    the page that was least recently used is replaced.
+    """
     def __init__(self, size: int, swap_memory: SwapMemory):
         super().__init__(size, swap_memory)
         self.recent_page_queue = collections.deque()
