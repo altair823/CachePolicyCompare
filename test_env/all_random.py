@@ -7,14 +7,14 @@
 """
 import numpy as np
 
-from test_settings import iterations
-from cache_test import test_all
+from test_env.settings import iterations
+from test_env.cache_test import test_all
 
 
-def all_random_test():
+def test():
     test_cases = np.random.randint(0, 100, iterations)
     test_all(str(iterations) + "_all_random_test.png", test_cases)
 
 
 if __name__ == '__main__':
-    all_random_test()
+    test()

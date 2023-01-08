@@ -11,7 +11,7 @@ from swap_mem import SwapMemory
 import numpy as np
 import matplotlib.pyplot as plt
 
-from test_settings import iterations, cache_min_value, cache_max_value
+from test_env.settings import iterations, cache_min_value, cache_max_value
 
 
 def test_all(test_name: str, test_cases: np.ndarray):
@@ -42,6 +42,7 @@ def test_all(test_name: str, test_cases: np.ndarray):
         lru_cache_hit_count.append(lru_cache.hit_count)
 
     # Comparing the relationship between cache size and cache hits by cache type
+    # Creating
     plt.title("Random 10000 page requests with cache size 1-100")
     plt.plot(optimal_cache_hit_count, label="Optimal Cache")
     plt.plot(random_cache_hit_count, label="Random Cache")
