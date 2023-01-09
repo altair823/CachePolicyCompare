@@ -53,6 +53,7 @@ def test_all(test_name: str, test_cases: np.ndarray):
     plt.xlabel("Cache Size")
     plt.ylabel("Cache Hits")
     # plt.show()
+    test_name = test_name.replace(" ", "_")
     plt.savefig(test_name + ".png", dpi=800)
     plt.close()
 

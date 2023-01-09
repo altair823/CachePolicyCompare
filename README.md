@@ -25,4 +25,13 @@ Here are the page request types:
 ## Test Results
 
 #### All Random
-![All_random_test_result](Random page requests with cache size 1 to 100.png)
+![All_random_test_result](Random_page_requests_with_cache_size_1_to_100.png)
+
+
+#### Eighty vs twenty
+![Eighty_vs_twenty_test_result](Eighty_vs_twenty_page_requests_with_cache_size_1_to_100.png)
+
+
+
+#### Fifty serial
+![Fifty_serial_test_result](Fifty_serial_page_requests_with_cache_size_1_to_100.png)
