@@ -1,6 +1,6 @@
 import numpy as np
 
-from swap_mem import SwapMemory
+from test_env.swap_mem import SwapMemory
 from page.page import Page
 
 

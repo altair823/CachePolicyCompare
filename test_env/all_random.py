@@ -13,7 +13,7 @@ from test_env.cache_test import test_all
 
 def test():
     test_cases = np.random.randint(0, 100, iterations)
-    test_all(str(iterations) + "_all_random_test.png", test_cases)
+    test_all("Random page requests with cache size 1 to 100", test_cases)
 
 
 if __name__ == '__main__':

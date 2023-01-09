@@ -9,7 +9,7 @@ def test():
     twenty_pages = np.random.randint(20, 100, int(iterations * 0.2))
     test_cases = np.concatenate((eighty_pages, twenty_pages))
     np.random.shuffle(test_cases)
-    test_all(str(iterations) + "_eighty_vs_twenty_test.png", test_cases)
+    test_all("Eighty vs twenty page requests with cache size 1 to 100", test_cases)
 
 
 if __name__ == '__main__':

@@ -6,7 +6,7 @@ from cache.fifo_cache import FIFOCache
 from cache.lfu_cache import LFUCache
 from cache.lru_cache import LRUCache
 
-from swap_mem import SwapMemory
+from test_env.swap_mem import SwapMemory
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -43,17 +43,18 @@ def test_all(test_name: str, test_cases: np.ndarray):
 
     # Comparing the relationship between cache size and cache hits by cache type
     # Creating
-    plt.title("Random 10000 page requests with cache size 1-100")
-    plt.plot(optimal_cache_hit_count, label="Optimal Cache")
-    plt.plot(random_cache_hit_count, label="Random Cache")
-    plt.plot(fifo_cache_hit_count, label="FIFO Cache")
+    plt.title(test_name)
+    plt.plot(optimal_cache_hit_count, label="Optimal Cache", linestyle='--', linewidth=3)
+    plt.plot(random_cache_hit_count, label="Random Cache", linestyle='--', linewidth=3)
+    plt.plot(fifo_cache_hit_count, label="FIFO Cache", linewidth=4, alpha=0.5)
     # plt.plot(lfu_cache_hit_count, label="LFU Cache")
-    plt.plot(lru_cache_hit_count, label="LRU Cache")
+    plt.plot(lru_cache_hit_count, label="LRU Cache", linestyle='--', linewidth=3)
     plt.legend()
     plt.xlabel("Cache Size")
     plt.ylabel("Cache Hits")
     # plt.show()
-    plt.savefig(test_name, dpi=800)
+    plt.savefig(test_name + ".png", dpi=800)
+    plt.close()
 
     # Print all the cache hit counts
     # print("Optimal Cache Hit Count: " + str(optimal_cache_hit_count))
