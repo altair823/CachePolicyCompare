@@ -1,3 +1,5 @@
+import random
+
 import numpy as np
 from tqdm import trange
 
@@ -49,17 +51,26 @@ class OptimalCache(Cache):
         """
         # Find the page that will not be used for the longest time
         max_index = 0
-        max_distance = 0
+        max_distance = -1
         for i in range(len(self.page_nums)):
-            found_index = np.where(self.future_page_nums == self.page_nums[i])[0][0]
-            distance = found_index - self.counter
+            found_indices = np.where(self.future_page_nums[self.counter:] == self.page_nums[i])[0]
+            found_first_index = 0
+            if len(found_indices) == 0:
+                distance = -1
+            else:
+                distance = found_indices[0]
             if distance > max_distance:
                 max_distance = distance
                 max_index = i
-        # Replace the page
-        self.page_nums[max_index] = page.num
-        self.page_data[max_index] = page.data
-        return max_index
+        if max_distance == -1:
+            rand_index = random.randint(0, len(self.page_nums) - 1)
+            self.page_nums[rand_index] = page.num
+            self.page_data[rand_index] = page.data
+            return rand_index
+        else:
+            self.page_nums[max_index] = page.num
+            self.page_data[max_index] = page.data
+            return max_index
 
     def find_distance(self, page_num: int):
         """
@@ -95,7 +106,7 @@ class SingleTest(TestCase):
         optimal_cache_hit_count = []
         for cache_size in trange(1, 100):
             # Get the future page numbers
-            future_pages = np.random.randint(0, 99, 1000)
+            future_pages = np.random.randint(0, 99, 10000)
             # Create the cache
             optimal_cache = OptimalCache(cache_size, SwapMemory(100), future_pages)
             # Get the page data
@@ -111,3 +122,17 @@ class SingleTest(TestCase):
         import matplotlib.pyplot as plt
         plt.plot(optimal_cache_hit_count)
         plt.show()
+
+
+if __name__ == '__main__':
+    # Get the future page numbers
+    future_pages = np.random.randint(0, 99, 1000)
+    # Create the cache
+    optimal_cache = OptimalCache(10, SwapMemory(100), future_pages)
+    # Get the page data
+    for i in future_pages:
+        a = optimal_cache.get_page_data(i)
+        # Check data
+        assert a == "h" + chr(i)
+    # Print the cache
+    print(optimal_cache)
