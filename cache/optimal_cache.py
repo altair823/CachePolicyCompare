@@ -1,9 +1,11 @@
 import numpy as np
+from tqdm import trange
 
 from cache.cache_type import Cache
 from page.page import Page
 from test_env.swap_mem import SwapMemory
 
+from unittest import TestCase
 
 class OptimalCache(Cache):
     """
@@ -20,6 +22,24 @@ class OptimalCache(Cache):
     def __init__(self, size: int, swap_memory: SwapMemory, future_page_nums: np.ndarray):
         super().__init__(size, swap_memory)
         self.future_page_nums = future_page_nums
+        self.counter = 0
+
+    def get_page_data(self, _page_num: int):
+        """
+        Get page data from cache.
+        :param _page_num: Dummy page number. This is not used.
+        :return: Page data
+        """
+        page_num = self.future_page_nums[self.counter]
+        index = np.where(self.page_nums == page_num)
+        if index[0].size == 0:
+            data = self.page_data[self.insert(self.swap_memory.get_page(page_num))]
+            self.counter += 1
+        else:
+            self.hit_count += 1
+            data = self.page_data[index[0]][0]
+            self.counter += 1
+        return data
 
     def replace(self, page: Page):
         """
@@ -31,7 +51,8 @@ class OptimalCache(Cache):
         max_index = 0
         max_distance = 0
         for i in range(len(self.page_nums)):
-            distance = self.find_distance(i)
+            found_index = np.where(self.future_page_nums == self.page_nums[i])[0][0]
+            distance = found_index - self.counter
             if distance > max_distance:
                 max_distance = distance
                 max_index = i
@@ -46,20 +67,47 @@ class OptimalCache(Cache):
         :param page_num: Page number to find distance for
         :return: Distance between the given page and the next time it will be used
         """
-        return np.where(self.future_page_nums == page_num)[0][0]
+        found_index = np.where(self.future_page_nums == page_num)[0][0]
+
         # for i in range(len(self.future_page_nums)):
         #     if self.future_page_nums[i] == page_num:
         #         return i
         # return len(self.future_page_nums) + 1
 
 
-if __name__ == '__main__':
-    # Get the future page numbers
-    future_pages = np.random.randint(0, 99, 10000)
-    # Create the cache
-    optimal_cache = OptimalCache(10, SwapMemory(100), future_pages)
-    # Get the page data
-    for i in range(0, 10000):
-        optimal_cache.get_page_data(future_pages[i])
-    # Print the cache
-    print(optimal_cache)
+class SingleTest(TestCase):
+    # Single Cache Test
+    def test_single(self):
+        # Get the future page numbers
+        future_pages = np.random.randint(0, 99, 1000)
+        # Create the cache
+        optimal_cache = OptimalCache(10, SwapMemory(100), future_pages)
+        # Get the page data
+        for i in future_pages:
+            a = optimal_cache.get_page_data(i)
+            # Check data
+            assert a == "h" + chr(i)
+        # Print the cache
+        print(optimal_cache)
+
+    # Multiple Cache Test
+    def test_multiple(self):
+        optimal_cache_hit_count = []
+        for cache_size in trange(1, 100):
+            # Get the future page numbers
+            future_pages = np.random.randint(0, 99, 1000)
+            # Create the cache
+            optimal_cache = OptimalCache(cache_size, SwapMemory(100), future_pages)
+            # Get the page data
+            for i in future_pages:
+                a = optimal_cache.get_page_data(i)
+                # Check data
+                assert a == "h" + chr(i)
+            # Print the cache
+            # Save the hit count
+            optimal_cache_hit_count.append(optimal_cache.hit_count)
+
+        # Show matplotlib graph
+        import matplotlib.pyplot as plt
+        plt.plot(optimal_cache_hit_count)
+        plt.show()

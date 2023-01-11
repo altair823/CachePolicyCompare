@@ -26,7 +26,7 @@ class Cache:
             return self.page_data[self.insert(self.swap_memory.get_page(page_num))]
         else:
             self.hit_count += 1
-            return self.page_data[index[0]]
+            return self.page_data[index[0]][0]
 
     def replace(self, page: Page):
         """
